@@ -68,7 +68,7 @@ const isCompleted = computed(() => result.value?.image.includes('status_4'))
           <input type="text" required v-model="track" placeholder="Número de rastreo"
             class="px-4 w-full focus:outline-none">
           <button type="submit" aria-label="Buscar paquete"
-            class="flex p-2 items-center justify-center bg-F39912 bg-amber-400 text-white h-full rounded-full transition select-none duration-300 transform active:scale-110">
+            class="flex p-2 items-center justify-center bg-amber-400 text-white h-full rounded-full transition select-none duration-300 transform active:scale-110">
             <SearchSvg />
           </button>
         </div>
@@ -116,7 +116,7 @@ const isCompleted = computed(() => result.value?.image.includes('status_4'))
         </div>
       </div>
       <div v-else class="text-center text-xl max-w-xl">
-        <div class="px-4 mb-5 text-gray-500" v-if="message">
+        <div v-if="message" class="text-sm w-full px-4 bg-red-100 text-red-500 py-2 rounded-xl mb-5">
           {{ message }}
         </div>
         <img src="/src/assets/search.png" alt="" class="mx-auto w-40 h-auto">
