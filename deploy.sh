@@ -2,7 +2,14 @@
 
 set -e
 
+git add .
+git commit -m "update"
+git push
+
 npm run build
+
+# copiar CNAME
+cp CNAME dist/
 
 cd dist
 

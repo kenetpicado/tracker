@@ -34,7 +34,11 @@ function searchPachage() {
       history.value = response.data.history.reverse()
     })
     .catch(error => {
-      message.value = error.response?.data?.message || 'Error al buscar el paquete'
+      if (error.response?.status === 404) {
+        message.value = 'Aún no hemos recibido este paquete.'
+      } else {
+        message.value = error.response?.data?.message || 'Error al buscar el paquete'
+      }
       toast.error(message.value)
     })
     .finally(() => {
@@ -66,12 +70,12 @@ function searchPachage() {
     </div>
   </section>
   <section class="bg-white text-gray-800 h-full mb-4">
-    <div class="w-full flex items-center justify-center mb-4">
+    <div class="w-full flex flex-col items-center justify-center mb-4">
       <PackageDetails :result="result" :history="history" />
 
-      <div v-if="!result" class="text-center text-xl max-w-xl">
+      <div v-if="!result" class="text-center text-xl max-w-xl px-4">
         <ErrorMessage v-if="message" :message="message" />
-        <img src="/src/assets/search.png" alt="" class="mx-auto w-40 h-auto">
+        <img src="/src/assets/brand.jpeg" alt="" class="mx-auto w-full h-auto rounded-lg">
       </div>
     </div>
   </section>
