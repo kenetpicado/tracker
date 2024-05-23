@@ -3,8 +3,8 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 export function useTrack() {
-  //const BASE_URL = 'https://donut.strain-team.com'
-  const BASE_URL = 'http://127.0.0.1:8000'
+  const BASE_URL = 'https://donut.strain-team.com'
+  // const BASE_URL = 'http://127.0.0.1:8000'
   const searching = ref(false)
   const result = ref(null)
   const track = ref('')
@@ -43,7 +43,11 @@ export function useTrack() {
     result.value = null
   }
 
-  return { search, result, searching, track }
+  function clear() {
+    track.value = ''
+  }
+
+  return { search, result, searching, track, clear }
 }
 
 export default useTrack

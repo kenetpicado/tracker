@@ -5,7 +5,7 @@ import PackageDetails from '@/components/PackageDetails.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import useTrack from '@/composables/useTrack'
 
-const { search, result, searching, track } = useTrack()
+const { search, result, searching, track, clear } = useTrack()
 
 function pasteFrom() {
   navigator.clipboard.readText().then((text) => {
@@ -30,23 +30,34 @@ function pasteFrom() {
           número de seguimiento y mantente al tanto del progreso de tu paquete en tiempo real!
         </div>
         <SearchInput v-model="track" />
-        <button
-          type="button"
-          @click="pasteFrom"
-          class="bg-green-500 px-4 py-2 rounded-xl transition select-none duration-300 transform active:scale-110"
-        >
-          <div class="flex gap-1 items-center">
-            <span>Pegar</span>
-            <img src="/src/assets/clipboard.svg" alt="" class="w-4" />
-          </div>
-        </button>
+        <div class="w-full flex justify-between">
+          <button
+            type="button"
+            @click="pasteFrom"
+            class="transition select-none duration-300 transform active:scale-110"
+          >
+            <div class="flex gap-0.5 items-center">
+              <span>Pegar</span>
+              <img src="/src/assets/clipboard.svg" alt="" class="w-4" />
+            </div>
+          </button>
+          <button
+            v-if="track"
+            type="button"
+            @click="clear"
+            class="transition select-none duration-300 transform active:scale-110"
+          >
+            <div class="flex gap-1 items-center">
+              <img src="/src/assets/eraser.svg" alt="" />
+            </div>
+          </button>
+        </div>
       </form>
     </div>
   </section>
   <section class="bg-white text-gray-800 h-full mb-4">
     <div class="w-full flex flex-col items-center justify-center mb-4">
       <PackageDetails :result="result" />
-
       <div v-if="!result" class="text-center text-xl max-w-xl px-4">
         <img src="/src/assets/brand.jpeg" alt="" class="mx-auto w-full h-auto rounded-lg" />
       </div>
