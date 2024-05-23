@@ -1,81 +1,54 @@
 <script setup>
-import axios from 'axios';
-import { ref } from 'vue';
-import { toast } from '@/utils/toast.js';
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
-import PackageDetails from '@/components/PackageDetails.vue';
-import ErrorMessage from '@/components/ErrorMessage.vue';
-import SearchInput from '@/components/SearchInput.vue';
+import PackageDetails from '@/components/PackageDetails.vue'
+import SearchInput from '@/components/SearchInput.vue'
+import useTrack from '@/composables/useTrack'
 
-const BASE_URL = "https://donut.strain-team.com"
+const { search, result, searching, track } = useTrack()
 
-const track = ref("")
-const isLoading = ref(false)
-const result = ref(null)
-const history = ref([])
-const message = ref(null)
-
-function searchPachage() {
-  if (!track.value) {
-    toast.error('Ingresa un número de rastreo')
-    return
-  }
-
-  result.value = null
-  message.value = null
-
-  isLoading.value = true
-
-  axios
-    .post(`${BASE_URL}/api/track`, { track: track.value })
-    .then(response => {
-      result.value = response.data
-      history.value = response.data.history.reverse()
-    })
-    .catch(error => {
-      if (error.response?.status === 404) {
-        message.value = 'Aún no hemos recibido este paquete.'
-      } else {
-        message.value = error.response?.data?.message || 'Error al buscar el paquete'
-      }
-      toast.error(message.value)
-    })
-    .finally(() => {
-      isLoading.value = false
-    })
+function pasteFrom() {
+  navigator.clipboard.readText().then((text) => {
+    track.value = text
+  })
 }
-
 </script>
 
 <template>
   <section class="bg-gulf-blue-950 text-white">
-    <Loading v-model:active="isLoading" :is-full-page="true" />
+    <Loading v-model:active="searching" :is-full-page="true" />
     <header class="px-4 lg:px-10 py-6">
       <a href="https://enviosdeoccidente.com/">
-        <img src="/src/assets/logo.png" alt="" class="w-10 h-auto">
+        <img src="/src/assets/logo.png" alt="" class="w-10 h-auto" />
       </a>
     </header>
-    <div class="w-full flex items-center justify-center mb-6">
-      <form @submit.prevent="searchPachage" class="text-center py-6 px-4 max-w-xl">
-        <h5 class="text-5xl lg:text-4xl font-bold mb-8">
-          ¡Rastrea tu paquete!
-        </h5>
+    <div class="w-full flex flex-col items-center justify-center mb-6">
+      <form @submit.prevent="search" class="text-center py-6 px-4 max-w-xl">
+        <h5 class="text-5xl lg:text-4xl font-bold mb-8">¡Rastrea tu paquete!</h5>
         <div class="text-sm font-light mb-10 leading-relaxed">
-          Rastrea tu paquete fácilmente con nuestro servicio de seguimiento de envíos. ¡Ingresa el número de
-          seguimiento y mantente al tanto del progreso de tu paquete en tiempo real!
+          Rastrea tu paquete fácilmente con nuestro servicio de seguimiento de envíos. ¡Ingresa el
+          número de seguimiento y mantente al tanto del progreso de tu paquete en tiempo real!
         </div>
         <SearchInput v-model="track" />
+        <button
+          type="button"
+          @click="pasteFrom"
+          class="bg-green-500 px-4 py-2 rounded-xl transition select-none duration-300 transform active:scale-110"
+        >
+          <div class="flex gap-1 items-center">
+            <span>Pegar</span>
+            <img src="/src/assets/clipboard.svg" alt="" class="w-4" />
+          </div>
+        </button>
       </form>
     </div>
   </section>
   <section class="bg-white text-gray-800 h-full mb-4">
     <div class="w-full flex flex-col items-center justify-center mb-4">
-      <PackageDetails :result="result" :history="history" />
+      <PackageDetails :result="result" />
 
       <div v-if="!result" class="text-center text-xl max-w-xl px-4">
-        <ErrorMessage v-if="message" :message="message" />
-        <img src="/src/assets/brand.jpeg" alt="" class="mx-auto w-full h-auto rounded-lg">
+        <img src="/src/assets/brand.jpeg" alt="" class="mx-auto w-full h-auto rounded-lg" />
       </div>
     </div>
   </section>
