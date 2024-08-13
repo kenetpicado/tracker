@@ -58,7 +58,7 @@ function pasteFrom() {
   <section class="bg-white text-gray-800 h-full mb-4">
     <div class="w-full flex flex-col items-center justify-center mb-4">
       <PackageDetails :result="result" />
-      <div v-if="!result" class="text-center text-xl max-w-xl px-4">
+      <div v-if="!result.details.length" class="text-center text-xl max-w-xl px-4">
         <img src="/src/assets/brand.jpeg" alt="" class="mx-auto w-full h-auto rounded-lg" />
       </div>
     </div>

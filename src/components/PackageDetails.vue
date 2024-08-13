@@ -1,46 +1,31 @@
 <template>
   <Transition>
-    <div v-if="result" class="text-center max-w-xl">
-      <div class="space-y-2 mb-8">
-        <h5 class="text-3xl font-bold mb-4">
-          {{ result.status }}
-        </h5>
-        <div v-if="result.search" class="font-bold">
-          {{ result.search }}
-        </div>
-        <div>
-          {{ result.date }}
-        </div>
-        <div class="font-bold">
-          {{ result.track }}
-        </div>
-        <div>
-          {{ result.guide }}
-        </div>
-        <div>
-          {{ result.info }}
+    <div v-if="result.details.length > 0" class="text-center max-w-xl">
+      <div class="space-y-2 mb-8 px-1">
+        <div v-for="(item, index) in result.details" :key="index" class="text-center">
+          <span :class="{'font-bold text-2xl': index === 0}" v-html="item" style="white-space: pre-wrap;"></span>
         </div>
       </div>
-      <div v-if="result.history?.length > 0">
-        <div v-for="(log, index) in result.history" class="mb-5" :key="index">
+      <div v-if="result.logs.length > 0">
+        <div v-for="(log, index) in result.logs" class="mb-5" :key="index">
           <div class="flex flex-col items-center justify-center mb-2">
             <span
               class="font-bold flex items-center justify-center w-8 h-8 text-white rounded-full"
               :class="
-                result.history.length - 1 == index && isCompleted ? 'bg-green-500' : 'bg-amber-400 '
+                result.logs.length - 1 == index  && result.is_completed ? 'bg-green-500' : 'bg-amber-400 '
               "
             >
-              <CheckSvg v-if="result.history.length - 1 == index && isCompleted" />
+              <CheckSvg v-if="result.logs.length - 1 == index && result.is_completed" />
               <label v-else>
                 {{ index + 1 }}
               </label>
             </span>
           </div>
           <div class="font-bold text-lg uppercase">
-            {{ dictionary[log.title] ?? log.title }}
+            {{ log.status }} {{ result.logs.length - 1 == index  }}
           </div>
           <div>
-            {{ log.date }}
+            {{ log.formatted }}
           </div>
         </div>
       </div>
@@ -49,18 +34,15 @@
 </template>
 
 <script setup>
-import { dictionary } from '@/utils/dictionary'
 import CheckSvg from '@/components/icons/CheckSvg.vue'
-import { computed } from 'vue'
 
-const props = defineProps({
+defineProps({
   result: {
     type: Object,
     required: false
   }
 })
 
-const isCompleted = computed(() => props.result?.image.includes('status_4'))
 </script>
 
 <style>

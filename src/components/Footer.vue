@@ -4,7 +4,7 @@
       <div>© {{ CURRENT_YEAR }} Envíos de Occidente</div>
       <small>
         Desarrollado por
-        <a href="https://www.linkedin.com/in/kenetpicado/" class="text-gulf-blue-950"> Kenet P. </a>
+        <a href="https://strain-team.com" target="_blank" class="text-gulf-blue-950">StrainTeam Developers</a>
       </small>
     </div>
   </footer>
