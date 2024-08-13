@@ -22,7 +22,7 @@
             </span>
           </div>
           <div class="font-bold text-lg uppercase">
-            {{ log.status }} {{ result.logs.length - 1 == index  }}
+            {{ log.status }}
           </div>
           <div>
             {{ log.formatted }}
