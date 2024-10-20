@@ -3,19 +3,15 @@
     <div v-if="result.details.length > 0" class="text-center max-w-xl">
       <div class="space-y-2 mb-8 px-1">
         <div v-for="(item, index) in result.details" :key="index" class="text-center">
-          <span :class="{'font-bold text-2xl': index === 0}" v-html="item" style="white-space: pre-wrap;"></span>
+          <span :class="{ 'font-bold text-2xl': index === 0 }" v-html="item" style="white-space: pre-wrap;"></span>
         </div>
       </div>
       <div v-if="result.logs.length > 0">
         <div v-for="(log, index) in result.logs" class="mb-5" :key="index">
           <div class="flex flex-col items-center justify-center mb-2">
-            <span
-              class="font-bold flex items-center justify-center w-8 h-8 text-white rounded-full"
-              :class="
-                result.logs.length - 1 == index  && result.is_completed ? 'bg-green-500' : 'bg-amber-400 '
-              "
-            >
-              <CheckSvg v-if="result.logs.length - 1 == index && result.is_completed" />
+            <span class="font-bold flex items-center justify-center w-8 h-8 text-white rounded-full" :class="log.status === 'Entregado' ? 'bg-green-500' : 'bg-amber-400 '
+              ">
+              <CheckSvg v-if="log.status === 'Entregado'" />
               <label v-else>
                 {{ index + 1 }}
               </label>
@@ -25,7 +21,7 @@
             {{ log.status }}
           </div>
           <div>
-            {{ log.formatted }}
+            {{ log.date }}
           </div>
         </div>
       </div>

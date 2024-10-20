@@ -1,6 +1,4 @@
 <script setup>
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/css/index.css'
 import PackageDetails from '@/components/PackageDetails.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import useTrack from '@/composables/useTrack'
@@ -16,7 +14,6 @@ function pasteFrom() {
 
 <template>
   <section class="bg-gulf-blue-950 text-white">
-    <Loading v-model:active="searching" :is-full-page="true" />
     <header class="px-4 lg:px-10 py-6">
       <a href="https://enviosdeoccidente.com/">
         <img src="/src/assets/logo.png" alt="" class="w-10 h-auto" />
@@ -29,24 +26,17 @@ function pasteFrom() {
           Rastrea tu paquete fácilmente con nuestro servicio de seguimiento de envíos. ¡Ingresa el
           número de seguimiento y mantente al tanto del progreso de tu paquete en tiempo real!
         </div>
-        <SearchInput v-model="track" />
+        <SearchInput v-model="track" :loading="searching" />
         <div class="w-full flex justify-between">
-          <button
-            type="button"
-            @click="pasteFrom"
-            class="transition select-none duration-300 transform active:scale-110"
-          >
+          <button type="button" @click="pasteFrom"
+            class="transition select-none duration-300 transform active:scale-110">
             <div class="flex gap-0.5 items-center">
               <span>Pegar</span>
               <img src="/src/assets/clipboard.svg" alt="" class="w-4" />
             </div>
           </button>
-          <button
-            v-if="track"
-            type="button"
-            @click="clear"
-            class="transition select-none duration-300 transform active:scale-110"
-          >
+          <button v-if="track" type="button" @click="clear"
+            class="transition select-none duration-300 transform active:scale-110">
             <div class="flex gap-1 items-center">
               <img src="/src/assets/eraser.svg" alt="" />
             </div>
