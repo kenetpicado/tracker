@@ -3,62 +3,45 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 export function useTrack() {
-  const BASE_URL = 'https://scrape-it-production.up.railway.app'
-  //const BASE_URL = 'http://localhost:3000'
+  //const BASE_URL = 'https://ft-backend-production-e6f5.up.railway.app'
+  const BASE_URL = 'http://localhost:3001'
   const searching = ref(false)
-  const track = ref('')
-  const result = ref({
-    details: [],
-    logs: []
-  })
+
+  const client = ref('')
+  const packages = ref([])
+  const method = ref('tracking')
 
   const search = async () => {
-    if (!track.value) {
-      toast.error('Ingresa un número de rastreo')
-      return
-    }
+    searching.value = true
 
-    if (track.value.includes(' ')) {
-      toast.error('No se permiten espacios en blanco')
-      return
-    }
+    if (!client.value) return
 
-    if (track.value.length > 40) {
-      toast.error('El número de rastreo no puede superar los 40 caracteres')
-      return
-    }
-
-    try {
-      resetValues()
-      searching.value = true
-      const { data } = await axios.get(`${BASE_URL}/everest`, {
+    await axios
+      .get(`${BASE_URL}/search`, {
         params: {
-          track: track.value
+          client: client.value
         }
       })
-      result.value = {
-        details: data.details,
-        logs: data.logs
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Error al buscar el paquete')
-    } finally {
-      searching.value = false
-    }
+      .then(({ data }) => {
+        packages.value = data
+
+        if (data.length === 0) {
+          toast.info('No se encontraron paquetes')
+        }
+      })
+      .catch(() => {
+        toast.error('Error al buscar el paquete')
+      })
+      .finally(() => {
+        searching.value = false
+      })
   }
 
   function resetValues() {
-    result.value = {
-      details: [],
-      logs: []
-    }
+    packages.value = []
   }
 
-  function clear() {
-    track.value = ''
-  }
-
-  return { search, result, searching, track, clear }
+  return { search, searching, resetValues, client, packages, method }
 }
 
 export default useTrack

@@ -1,13 +1,12 @@
 <script setup>
-import PackageDetails from '@/components/PackageDetails.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import useTrack from '@/composables/useTrack'
 
-const { search, result, searching, track, clear } = useTrack()
+const { search, packages, searching, client } = useTrack()
 
 function pasteFrom() {
   navigator.clipboard.readText().then((text) => {
-    track.value = text
+    client.value = text
   })
 }
 </script>
@@ -24,21 +23,20 @@ function pasteFrom() {
         <h5 class="text-5xl lg:text-4xl font-bold mb-8">¡Rastrea tu paquete!</h5>
         <div class="text-sm font-light mb-10 leading-relaxed">
           Rastrea tu paquete fácilmente con nuestro servicio de seguimiento de envíos. ¡Ingresa el
-          número de seguimiento y mantente al tanto del progreso de tu paquete en tiempo real!
+          nombre en el paquete y mantente al tanto del progreso de tu paquete en tiempo real!
         </div>
-        <SearchInput v-model="track" :loading="searching" />
+
+        <SearchInput v-model="client" :loading="searching" />
+
         <div class="w-full flex justify-between">
-          <button type="button" @click="pasteFrom"
-            class="transition select-none duration-300 transform active:scale-110">
+          <button
+            type="button"
+            @click="pasteFrom"
+            class="transition select-none duration-300 transform active:scale-110"
+          >
             <div class="flex gap-0.5 items-center">
               <span>Pegar</span>
               <img src="/src/assets/clipboard.svg" alt="" class="w-4" />
-            </div>
-          </button>
-          <button v-if="track" type="button" @click="clear"
-            class="transition select-none duration-300 transform active:scale-110">
-            <div class="flex gap-1 items-center">
-              <img src="/src/assets/eraser.svg" alt="" />
             </div>
           </button>
         </div>
@@ -47,8 +45,24 @@ function pasteFrom() {
   </section>
   <section class="bg-white text-gray-800 h-full mb-4">
     <div class="w-full flex flex-col items-center justify-center mb-4">
-      <PackageDetails :result="result" />
-      <div v-if="!result.details.length" class="text-center text-xl max-w-xl px-4">
+      <div v-if="packages.length" class="max-w-xl flex flex-col gap-4 w-full p-4">
+        <div v-for="item in packages" :key="item.id" class="w-full bg-white border rounded-lg p-4 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold">{{ item.guide }}</span>
+            <span class="font-light text-sm text-gray-400">{{ new Date(item.entryDate).toLocaleDateString() }}</span>
+          </div>
+          <div class="uppercase font-bold">
+            {{ item.client }}
+          </div>
+           <div class="text-sm">
+            {{ item.type }}, {{ item.grossWeight }} lb(s), {{ item.pieces }} pieza(s)
+          </div>
+          <div class="text-sm text-gray-400">
+            {{ item.description }}
+          </div>
+        </div>
+      </div>
+      <div class="text-center text-xl max-w-xl px-4">
         <img src="/src/assets/brand.jpeg" alt="" class="mx-auto w-full h-auto rounded-lg" />
       </div>
     </div>
