@@ -3,23 +3,34 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 export function useTrack() {
-  const BASE_URL = 'https://agency-api-production-883f.up.railway.app'
-  //const BASE_URL = 'http://localhost:3001'
+  //const BASE_URL = 'https://agency-api-production-883f.up.railway.app'
+  const BASE_URL = 'http://localhost:3001'
   const searching = ref(false)
 
+  const searchInput = ref('')
   const client = ref('')
+  const track = ref('')
   const packages = ref([])
-  const method = ref('tracking')
+  const method = ref('name')
 
   const search = async () => {
     searching.value = true
 
-    if (!client.value) return
+    if (!searchInput.value) return
+
+    if (method.value === 'tracking') {
+      track.value = searchInput.value
+      client.value = ''
+    } else {
+      client.value = searchInput.value
+      track.value = ''
+    }
 
     await axios
       .get(`${BASE_URL}/search`, {
         params: {
-          client: client.value
+          client: client.value,
+          track: track.value
         }
       })
       .then(({ data }) => {
@@ -41,7 +52,7 @@ export function useTrack() {
     packages.value = []
   }
 
-  return { search, searching, resetValues, client, packages, method }
+  return { search, searching, resetValues, client, track, packages, method, searchInput }
 }
 
 export default useTrack
