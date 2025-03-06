@@ -88,7 +88,7 @@ function switchTo(m) {
             {{ item.client }}
           </div>
           <div class="text-sm">
-            {{ item.type }}, {{ item.grossWeight }} lb(s), {{ item.pieces }} pieza(s)
+            {{ item.type }}
           </div>
           <div class="text-sm text-gray-400">
             {{ item.description }}
