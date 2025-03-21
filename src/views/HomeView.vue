@@ -79,13 +79,15 @@ function switchTo(m) {
           class="w-full bg-white border rounded-lg p-4 flex flex-col gap-2"
         >
           <div class="flex justify-between items-center mb-2">
-            <span class="font-bold truncate">{{ item.tracking }}</span>
+            <span class="font-bold truncate">{{ item.guide }}</span>
             <span class="font-light text-sm text-gray-400">{{
               new Date(item.createdAt).toLocaleDateString('es-NI')
             }}</span>
           </div>
           <div class="uppercase font-bold">
             {{ item.client }}
+          </div><div class="text-sm">
+            {{ item.tracking }}
           </div>
           <div class="text-sm">
             {{ item.type }}
